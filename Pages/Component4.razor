@@ -1,0 +1,32 @@
+﻿@page "/requests"
+
+@using Data
+@using BlazorServer.Models
+@using Microsoft.Extensions.Configuration
+@inject IDataAccess _data
+@inject IConfiguration _config
+
+<h3>Finance Requests</h3>
+
+@if (FinanceInfo == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @foreach (var p in FinanceInfo)
+    {
+        <p>
+            @p.Request_ID, @p.User_Accounts_User_ID, @p.Car_Car_ID, @p.Approval_Status @*insert button to approve here*@
+        </p>
+    }
+}
+@code {
+    List<FinanceModel> FinanceInfo;
+    protected override async Task OnInitializedAsync()
+    {
+        string sql = "select * from Finance_Requests;";
+
+        FinanceInfo = await _data.LoadData<FinanceModel, dynamic>(sql, new { }, _config.GetConnectionString("default"));
+    }
+}
