@@ -10,4 +10,12 @@ namespace BlazorServer.Models
         public int User_ID { get; set; }
         public string User_Email { get; set; }
     }
+
+    public class AccountModel
+    {
+        public int User_ID { get; set; }
+        public string User_Email { get; set; }
+        public string User_Password { get; set; }
+
+    }
 }

@@ -1,0 +1,36 @@
+﻿@page "/register"
+
+@using Data
+@using BlazorServer.Models
+@using Microsoft.Extensions.Configuration
+@inject IDataAccess _data
+@inject IConfiguration _config
+
+<h3>Register Account</h3>
+
+<div class="Account">
+    <form method="get">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" bind-value="New_Email" placeholder="Enter your email" required>
+        <br />
+        <label for="password">Password:</label>
+        <input type="text" id="password" name="password" bind-value="New_Password" placeholder="Enter your password" required>
+        <br />
+        <label for="confirm_password">Confirm Password:</label>
+        <input type="text" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+        <br />
+        <button type="submit" @onclick="create_account">Register</button>
+    </form>
+</div>
+
+@code {
+    private async Task create_account()
+    {
+        string New_Email = "";
+        string New_Password = "";
+        string sql = "insert into User_Accounts(User_Email, User_Password) VALUES (@New_Email, @New_Password);";
+
+        await _data.SaveData(sql, new { }, _config.GetConnectionString("default"));
+        // might need to add in parameters here
+    }
+}

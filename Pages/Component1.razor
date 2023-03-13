@@ -1,0 +1,36 @@
+﻿@page "/login"
+
+@using Data
+@using BlazorServer.Models
+@using Microsoft.Extensions.Configuration
+@inject IDataAccess _data
+@inject IConfiguration _config
+
+<PageTitle>Login</PageTitle>
+<h3>Login Page</h3>
+<div class="Login">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+    <br />
+    <label for="password">Password:</label>
+    <input type="text" id="password" name="password" placeholder="Enter your password" required>
+    <br />
+    <button type="submit" @onclick="login">Login</button>
+</div>
+
+@code {
+        List<AccountModel> accounts;
+        string email;
+        string password;
+        protected  async Task login()
+        {
+            string sql = "select * from User_Accounts where User_Email = @email and User_Password = @password;";
+
+            accounts = await _data.LoadData<AccountModel, dynamic>(sql, new { }, _config.GetConnectionString("default"));
+
+            if(accounts != null)
+            {
+                //return account not found//
+            }
+    }
+}
