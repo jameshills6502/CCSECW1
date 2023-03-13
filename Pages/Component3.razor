@@ -1,7 +1,30 @@
-﻿
+﻿@page "/carinfo"
 
-<h3>Component3</h3>
+<h3>Details about car chosen</h3>
 
+
+
+
+@if (people == null){
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @foreach (var p in people)
+    {
+        <p>
+            @p.Car_Image
+            @p.Car_Make, @p.Car_Series, @p.Car_Type
+            @p.Car_Cost
+        </p>
+    }
+}
 @code {
+    int car_id;
+    List<CarModel> CarInfo;
+    protected override async Task OnInitializedAsync() {
+        string sql = "select * from Cars where Car_ID = @car_id;";
 
+        CarInfo = await _data.LoadData<PersonModel, dynamic>(sql, new { }, _config.GetConnectionString("default"));
+    }
 }
