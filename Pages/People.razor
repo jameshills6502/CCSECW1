@@ -5,19 +5,30 @@
 @using Microsoft.Extensions.Configuration
 @inject IDataAccess _data
 @inject IConfiguration _config
-<h3>People</h3>
+<h3>Registered Users</h3>
 
 @if (people == null){
     <p><em>Loading...</em></p>
 }
 else
 {
-    @foreach (var p in people)
-    {
-        <p>
-            @p.User_ID, @p.User_Email
-        </p>
-    }
+    <table class="table table-stripped">
+        <thead style="background-color:#141e5e; color:white;">
+           <tr>
+            <th>User ID</th>
+            <th>User Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in people)
+            {
+            <tr>
+                <td>@p.User_ID</td>
+                <td>@p.User_Email</td>
+            </tr>
+            }
+            </tbody>
+            </table>
 }
 @code {
     List<PersonModel> people;

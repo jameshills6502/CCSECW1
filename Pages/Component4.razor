@@ -14,19 +14,58 @@
 }
 else
 {
-    @foreach (var p in FinanceInfo)
-    {
-        <p>
-            @p.Request_ID, @p.User_Accounts_User_ID, @p.Car_Car_ID, @p.Approval_Status @*insert button to approve here*@
-        </p>
+    <table class="table table-stripped">
+        <thead style="background-color:#141e5e; color:white;">
+            <tr>
+                    <th>Request ID</th>
+                    <th>User ID</th>
+                    <th>Car ID</th>
+                    <th>Amount Requested to Finance</th>
+                    <th>Approval Status</th>
+                    <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var p in FinanceInfo)
+        {
+                if (p.Approval_Status == null)
+                {
+                    <tr>
+                        <td>@p.Request_ID</td>
+                        <td>@p.User_ID</td>
+                        <td>@p.Car_ID</td>
+                        <td>@p.Amount_To_Finance</td>
+                        <td>@p.Approval_Status</td>
+                        <td>
+                            <span id="AcceptRequest" @onclick="() => AcceptRequest(p.User_ID)" class="oi align-content-xl-around me-3"></span>
+                        <span id="DenyRequest" @onclick="() => DenyRequest(p.User_ID)" class="oi align-content-xl-around me-3"></span>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
     }
 }
 @code {
     List<FinanceModel> FinanceInfo;
     protected override async Task OnInitializedAsync()
     {
-        string sql = "select * from Finance_Requests;";
+        string sql = "select * from Finance_Request;";
 
         FinanceInfo = await _data.LoadData<FinanceModel, dynamic>(sql, new { }, _config.GetConnectionString("default"));
     }
+    private async Task AcceptRequest(int id)
+    {
+        string sql = "UPDATE Finance_Request set Approval_Status = 'Accepted' where User_Account_User_ID = @id;";
+
+        await _data.SaveData(sql, new { }, _config.GetConnectionString("default"));
+    }
+    private async Task DenyRequest(int id)
+    {
+        string sql = "UPDATE Finance_Request set Approval_Status = 'Denied' where User_Account_User_ID = @id;";
+
+        await _data.SaveData(sql, new { }, _config.GetConnectionString("default"));
+    }
+}
 }

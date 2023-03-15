@@ -36,9 +36,9 @@ namespace BlazorServer.Models
         public int Request_ID { get; set; }
         public string Approval_Status { get; set; }
         public float Amount_To_Finance { get; set; }
-        public int Admin_Accounts_Admin_ID { get; set; }
+        public int Admin_ID { get; set; }
 
-        public int Car_Car_ID { get; set; }
-        public int User_Accounts_User_ID { get; set; }
+        public int Car_ID { get; set; }
+        public int User_ID { get; set; }
     }
 }
