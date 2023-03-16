@@ -38,15 +38,15 @@ else
                         <td>@p.Approval_Status</td>
                         <td>
                             <span id="AcceptRequest" @onclick="() => AcceptRequest(p.User_ID)" class="oi align-content-xl-around me-3"></span>
-                        <span id="DenyRequest" @onclick="() => DenyRequest(p.User_ID)" class="oi align-content-xl-around me-3"></span>
+                            <span id="DenyRequest" @onclick="() => DenyRequest(p.User_ID)" class="oi align-content-xl-around me-3"></span>
                         </td>
                     </tr>
                 }
-            }
+        }
         </tbody>
     </table>
-    }
 }
+
 @code {
     List<FinanceModel> FinanceInfo;
     protected override async Task OnInitializedAsync()
@@ -67,5 +67,4 @@ else
 
         await _data.SaveData(sql, new { }, _config.GetConnectionString("default"));
     }
-}
 }

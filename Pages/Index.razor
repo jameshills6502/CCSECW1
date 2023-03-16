@@ -1,8 +1,41 @@
 ﻿@page "/home"
 
+@using Data
+@using BlazorServer.Models
+@using Microsoft.Extensions.Configuration
+@inject IDataAccess _data
+@inject IConfiguration _config
+
 <PageTitle>Home</PageTitle>
 
 <h1>Welcome to Moto-Moto Motors!</h1>
-<p>Browse cars...</p>
 
+@if (CarInfo == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @foreach (var p in CarInfo)
+    {
+        <div class="">
+        <p>
+            @p.Car_Image
+            @p.Car_Make, @p.Car_Series, @p.Car_Type
+            @p.Car_Cost
+        </p>
+        </div>
+    }
+}
+
+@code {
+    int car_id;
+    List<CarModel> CarInfo;
+    protected override async Task OnInitializedAsync()
+    {
+        string sql = "select * from Cars;";
+
+        CarInfo = await _data.LoadData<CarModel, dynamic>(sql, new { }, _config.GetConnectionString("default"));
+    }
+}
 
