@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MotoMotoMotors.Data;
+using MotoMotoMotors.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<IDataAccess, DataAccess>();
+builder.Services.AddSingleton<ICarServicesInterface, CarService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

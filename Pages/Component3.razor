@@ -1,4 +1,4 @@
-﻿@page "/carinfo"
+﻿@page "/carinfo/{car_id}"
 
 @using Data
 @using BlazorServer.Models
@@ -10,23 +10,29 @@
 
 
 
-
+<div class="cars_to_display">
 @if (CarInfo == null){
     <p><em>Loading...</em></p>
 }
 else
 {
     @foreach (var p in CarInfo)
+    
     {
+        <h1> @p.Car_Make, @p.Car_Series</h1>
         <p>
-            @p.Car_Image
-            @p.Car_Make, @p.Car_Series, @p.Car_Type
-            @p.Car_Cost
+            <br>
+            Car Type: @p.Car_Type
+            <br>
+            Cost: £@p.Car_Cost
         </p>
     }
+    
 }
+</div>
 @code {
-    int car_id;
+    [Parameter]public int Id { get; set; }
+
     List<CarModel> CarInfo;
     protected override async Task OnInitializedAsync() {
         string sql = "select * from Cars where Car_ID = @car_id;";

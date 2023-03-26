@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
@@ -22,13 +23,15 @@ namespace BlazorServer.Models
     public class CarModel
     {
         public int Car_ID { get; set; }
-        public Blob Car_Image { get; set; }
         public string Car_Make { get; set; }
         public string Car_Series { get; set; }
 
+        public string Car_Image { get; set; } = "https://via.placeholder.com/300x300";
         public string Car_Type { get; set; }
-
         public float Car_Cost { get; set; }
+
+        public CategoryAttribute Category { get; set; }
+        public int CategoryId { get; set; }
     }
 
     public class FinanceModel

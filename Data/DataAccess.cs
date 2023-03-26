@@ -9,7 +9,7 @@ using MySql.Data.MySqlClient;
 
 public class DataAccess : IDataAccess
 {
-    public async Task<List<T>?> LoadData<T, U>(string sql, U parameters, string connectionString)
+    public async Task<List<T>> LoadData<T, U>(string sql, U parameters, string connectionString)
     {
         using (IDbConnection connection = new MySqlConnection(connectionString))
         {
