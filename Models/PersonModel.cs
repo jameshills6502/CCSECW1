@@ -31,7 +31,8 @@ namespace BlazorServer.Models
         public string Car_Image { get; set; } = "https://via.placeholder.com/300x300";
         public string Car_Type { get; set; }
         public float Car_Cost { get; set; }
-
+        
+        public int Car_Stock { get; set; }
         public int Car_Category { get; set; }
 
     }

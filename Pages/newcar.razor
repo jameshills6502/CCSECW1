@@ -1,7 +1,67 @@
 ﻿@page "/newcar"
+@using BlazorServer.Models;
+@using Data;
+@inject IDataAccess _data
+@inject IConfiguration _config
+
 
 <h3>newcar</h3>
+<EditForm Model="@Car" OnValidSubmit="@NewCar">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label>Car Make</label>
+        <InputText id="carmake" class="form-control" @bind-Value="Car.Car_Make"/>
+    </div>
+    <div class="form-group">
+        <label>Car Series</label>
+        <InputText id="carseries" class="form-control" @bind-Value="Car.Car_Series"/>
+    </div>
+    <div class="form-group">
+        <label>Car Type</label>
+        <InputText id="cartype" class="form-control" @bind-Value="Car.Car_Type"/>
+    </div>
+    <div class="form-group">
+        <label>Car Cost</label>
+        <InputNumber id="carseries" class="form-control" @bind-Value="Car.Car_Cost"/>
+    </div>
+        <div class="form-group">
+        <label>Car Stock</label>
+        <InputNumber id="carseries" class="form-control" @bind-Value="Car.Car_Stock"/>
+    </div>
+    <div class="form-group">
+        <label>Car Category</label>
+        <InputNumber id="carseries" class="form-control" @bind-Value="Car.Car_Category"/>
+    </div>
+    <div class="form-group">
+        <label>Car Image</label>
+        <InputText id="carseries" class="form-control" @bind-Value="Car.Car_Image"/>
+    </div>
+</EditForm>
+
 @*Inserts another car into the database from admin page*@
 @code {
-
+    private CarModel Car = new();
+    private async Task NewCar()
+    {
+        CarModel newcarinsert = new CarModel
+            {
+                Car_Make = Car.Car_Make,
+                Car_Category = Car.Car_Category,
+                Car_Cost = Car.Car_Cost,
+                Car_Type = Car.Car_Type,
+                Car_Series = Car.Car_Series,
+                Car_Image = Car.Car_Image,
+                Car_Stock = Car.Car_Stock
+            };
+        string carmake = Car.Car_Make;
+        int category = Car.Car_Category;
+        float cost = Car.Car_Cost;
+        string type = Car.Car_Type;
+        string series = Car.Car_Series;
+        string image = Car.Car_Image;
+        int stock = Car.Car_Stock;
+        string sql = "insert into car(Car_Make, Car_Series, Car_Type, Car_Cost, Car_Stock, Car_Image, Car_Category) values(@carmake, @series, @type, @cost, @stock, @image, @category);";
+        await _data.SaveData(sql, new { Car_Make = carmake, Car_Series = series, Car_Type = type, Car_Cost = cost, Car_Stock = stock, Car_Image = image, Car_Category = category}, _config.GetConnectionString("default"));
+    }
 }
