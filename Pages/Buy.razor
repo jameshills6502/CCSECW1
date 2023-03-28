@@ -55,7 +55,7 @@
                 ExpiryDate = purchase.ExpiryDate
             };
         purchases.Add(purchasemade);
-        string sql = "update car(Car_Stock) where Car_ID = @Id;";
+        string sql = "update car set Car_Stock = Car_Stock - 1 where Car_ID = @Id;";
         await _data.SaveData(sql, new { Car_ID = Id }, _config.GetConnectionString("default"));
 
     }

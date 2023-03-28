@@ -37,8 +37,8 @@ else
                         <td>@p.Amount_To_Finance</td>
                         <td>@p.Approval_Status</td>
                         <td>
-                            <span id="AcceptRequest" @onclick="() => AcceptRequest(p.User_ID)" class="oi align-content-xl-around me-3"></span>
-                            <span id="DenyRequest" @onclick="() => DenyRequest(p.User_ID)" class="oi align-content-xl-around me-3"></span>
+                            <button id="AcceptRequest" @onclick="() => AcceptRequest(p.User_ID)" class="oi align-content-xl-around me-3">Accept Request</button>
+                            <button id="DenyRequest" @onclick="() => DenyRequest(p.User_ID)" class="oi align-content-xl-around me-3">Deny Request</button>
                         </td>
                     </tr>
                 }

@@ -1,5 +1,57 @@
-﻿<h3>stock</h3>
+﻿@page "/stock"
+
+@using Data
+@using BlazorServer.Models
+@using Microsoft.Extensions.Configuration
+@inject IDataAccess _data
+@inject IConfiguration _config
+
+
+
+
+@if (CarInfo== null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-stripped">
+        <thead style="background-color:#141e5e; color:white;">
+            <tr>
+                    <th>Car ID</th>
+                    <th>Car Make</th>
+                    <th>Car Series</th>
+                    <th>Car Image</th>
+                    <th>Car Type</th>
+                    <th>Car Cost</th>
+                    <th>Car Category</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var p in CarInfo)
+        {
+                    <tr>
+                        <td>@p.Car_ID</td>
+                        <td>@p.Car_Make</td>
+                        <td>@p.Car_Series</td>
+                        <td>@p.Car_Image</td>
+                        <td>@p.Car_Type</td>
+                        <td>£@p.Car_Cost</td>
+                        <td>@p.Car_Category</td>
+                    </tr>
+        }
+        </tbody>
+    </table>
+}
+@*If possible in terms of time, add a sort by stock size option button*@
 
 @code {
+    List<CarModel> CarInfo;
 
+    protected override async Task OnInitializedAsync()
+    {
+        string sql = "select * from Car;";
+
+        CarInfo = await _data.LoadData<CarModel, dynamic>(sql, new { }, _config.GetConnectionString("default"));
+    }
 }
