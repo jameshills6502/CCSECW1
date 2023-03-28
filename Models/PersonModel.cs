@@ -32,8 +32,8 @@ namespace BlazorServer.Models
         public string Car_Type { get; set; }
         public float Car_Cost { get; set; }
 
-        public CategoryAttribute Category { get; set; }
-        public int CategoryId { get; set; }
+        public int Car_Category { get; set; }
+
     }
 
     public class FinanceModel

@@ -5,7 +5,7 @@
 @using Microsoft.Extensions.Configuration
 @inject IDataAccess _data
 @inject IConfiguration _config
-
+@inject NavigationManager NavManager
 <h3>Details about car chosen</h3>
 
 
@@ -26,6 +26,8 @@ else
             <br>
             Cost: £@p.Car_Cost
         </p>
+        <button onclick="financecar" >Finance Car</button>
+        <button onclick="buycar">Buy Car</button>
     }
     
 }
@@ -38,5 +40,13 @@ else
         string sql = "select * from Car where Car_ID = @cars_id;";
 
         CarInfo = await _data.LoadData<CarModel, dynamic>(sql, new { cars_id = @cars_id}, _config.GetConnectionString("default"));
+    }
+    private async Task financecar()
+    {
+        NavManager.NavigateTo("/pay");
+    }
+    private async Task buycar()
+    {
+        NavManager.NavigateTo("/buy/{cars_id}");
     }
 }

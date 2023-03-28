@@ -79,6 +79,7 @@ else
 
                 await using FileStream fs = new(path, FileMode.Create);
                 await file.OpenReadStream(maxFileSize).CopyToAsync(fs);
+                // upload to database here
             }
             catch (Exception ex)
             {

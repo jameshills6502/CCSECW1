@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -14,6 +15,7 @@ builder.Services.AddSingleton<IDataAccess, DataAccess>();
 builder.Services.AddSingleton<ICarServicesInterface, CarService>();
 builder.Services.AddOptions();
 builder.Services.AddAuthenticationCore();
+builder.Services.AddBlazoredLocalStorage();
 //.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 
 var app = builder.Build();

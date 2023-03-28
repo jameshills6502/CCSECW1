@@ -1,5 +1,62 @@
-﻿<h3>Buy</h3>
+﻿@page "/buy/{id}"
+@using BlazorServer.Models;
+@using MotoMotoMotors.Data
+@using Data
+@using Microsoft.Extensions.Configuration
+@inject IDataAccess _data
+@inject IConfiguration _config
 
+<h3>Buy</h3>
+@* Shows the customer the closest *@
+<EditForm Model="@purchase" OnValidSubmit="@sold">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+         <label>Card Type:</label>
+        <InputText id="CardType" class="form-control" @bind-Value="purchase.CardType" />
+    </div>
+   <div class="form-group">
+         <label>Card Holder Name:</label>
+        <InputText id="CardName" class="form-control" @bind-Value="purchase.CardName" />
+    </div>
+    <div class="form-group">
+        <label>Card Number:</label>
+        <InputText class="form-control" id="CardNumber" @bind-Value="purchase.CardNumber" />
+    </div>
+    <div class="form-group">
+        <label>Card Expiry Date:</label>
+        <InputText class="form-control" id="CardExpiry" @bind-Value="purchase.ExpiryDate" />
+    </div>
+    <div class="form-group">
+        <label>CVV:</label>
+        <InputText class="form-control" id="CVV" @bind-Value="purchase.CardCVV" />
+    </div>
+    <div class="form-group">
+        <label>Billing Address:</label>
+        <InputText class="form-control" id="BillingAddress" @bind-Value="purchase.BillingAddress" />
+    </div>
+    <button type="submit" class="btn btn-primary">Purchase</button>
+</EditForm>
 @code {
+    [Parameter] public string Id { get; set; }
 
+    List<CarModel> CarInfo;
+    List<PurchaseModel> purchases;
+    private PurchaseModel purchase = new();
+    private async Task sold()
+    {
+        PurchaseModel purchasemade = new PurchaseModel
+            {
+                CardNumber = purchase.CardNumber,
+                CardCVV = purchase.CardCVV,
+                CardName = purchase.CardName,
+                CardType = purchase.CardType,
+                BillingAddress = purchase.BillingAddress,
+                ExpiryDate = purchase.ExpiryDate
+            };
+        purchases.Add(purchasemade);
+        string sql = "update car(Car_Stock) where Car_ID = @Id;";
+        await _data.SaveData(sql, new { Car_ID = Id }, _config.GetConnectionString("default"));
+
+    }
 }
