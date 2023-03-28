@@ -1,4 +1,4 @@
-﻿@page "/carinfo/{car_id}"
+﻿@page "/carinfo/{cars_id}"
 
 @using Data
 @using BlazorServer.Models
@@ -31,12 +31,12 @@ else
 }
 </div>
 @code {
-    [Parameter]public int Id { get; set; }
+    [Parameter]public string cars_id { get; set; }
 
     List<CarModel> CarInfo;
     protected override async Task OnInitializedAsync() {
-        string sql = "select * from Cars where Car_ID = @car_id;";
+        string sql = "select * from Car where Car_ID = @cars_id;";
 
-        CarInfo = await _data.LoadData<CarModel, dynamic>(sql, new { }, _config.GetConnectionString("default"));
+        CarInfo = await _data.LoadData<CarModel, dynamic>(sql, new { cars_id = @cars_id}, _config.GetConnectionString("default"));
     }
 }

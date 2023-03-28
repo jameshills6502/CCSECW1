@@ -8,29 +8,55 @@
 
 <h3>Register Account</h3>
 
-<div class="Account">
-    <form method="get">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" bind-value="New_Email" placeholder="Enter your email" required>
-        <br />
-        <label for="password">Password:</label>
-        <input type="text" id="password" name="password" bind-value="New_Password" placeholder="Enter your password" required>
-        <br />
-        <label for="confirm_password">Confirm Password:</label>
-        <input type="text" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
-        <br />
-        <button type="submit" @onclick="create_account">Register</button>
-    </form>
-</div>
+
+<EditForm Model="@accounts" OnValidSubmit="@create_account">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+     <div class="form-group">
+         <label>Email:</label>
+    <InputText id="email" @bind-Value="accounts.Email"/>
+    </div>
+    <div class="form-group">
+        <label>Password:</label>
+    <InputText type="password" id="password" @bind-Value="accounts.Password" />
+    </div>
+    <div class="form-group">
+        <label>Confirm Password:</label>
+    <InputText type="password" id="confirm_password" @bind-Value="accounts.PasswordConfirmation" />
+    </div>
+    <button type="submit" class="btn btn-primary">Create Account</button>
+</EditForm>
 
 @code {
+    private List<UserModel> users;
+    private List<UserModel> check_user;
+    private AccountModel accounts = new();
     private async Task create_account()
     {
-        string New_Email = "";
-        string New_Password = "";
-        string sql = "insert into User_Accounts(User_Email, User_Password) VALUES (@New_Email, @New_Password);";
+        UserModel newaccount = new UserModel
+            {
+                Email = accounts.Email,
+                Password = accounts.Password
+            };
+        users.Add(newaccount);
+        string New_Email = accounts.Email;
+        string New_Password = accounts.Password;
+        string sql_check = "select * from User_Accounts where User_Email = @New_Email;";
 
-        await _data.SaveData(sql, new { }, _config.GetConnectionString("default"));
+        check_user = await _data.LoadData<UserModel, dynamic>(sql_check, new { User_Email = New_Email}, _config.GetConnectionString("default"));
+        if(check_user == null)
+        {
+            string sql = "insert into User_Accounts(User_Email, User_Password) VALUES (@New_Email, @New_Password);";
+            await _data.SaveData(sql, new { User_Email = New_Email, User_Password = New_Password}, _config.GetConnectionString("default"));
+        }
+        else
+        {
+            accounts.Password = string.Empty;
+            accounts.Email = string.Empty;
+            accounts.PasswordConfirmation = string.Empty;
+        }
+
+        
         // might need to add in parameters here
     }
 }

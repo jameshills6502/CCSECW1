@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
@@ -15,9 +16,10 @@ namespace BlazorServer.Models
 
     public class AccountModel
     {
-        public int User_ID { get; set; }
-        public string User_Email { get; set; }
-        public string User_Password { get; set; }
+        public int ID { get; set; }
+        [Required][EmailAddress] public string Email { get; set; }
+        [Required][MinLength(6, ErrorMessage = "Password must be 6 characters long")] public string Password { get; set; }
+        [Required][Compare("Password")] public string PasswordConfirmation { get; set; }
 
     }
     public class CarModel

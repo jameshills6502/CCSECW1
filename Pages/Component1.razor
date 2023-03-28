@@ -5,32 +5,36 @@
 @using Microsoft.Extensions.Configuration
 @inject IDataAccess _data
 @inject IConfiguration _config
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthStateProvider
 
 <PageTitle>Login</PageTitle>
 <h3>Login Page</h3>
-<EditForm Model="@user" OnValidSubmit="@HandleValidSubmit">
+<EditForm Model="@User" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator/>
     <ValidationSummary/>
     <div class="form-group">
         <label>Email</label>
-        <InputText class="form-control" @bind-Value="@user.Email" />
+        <InputText class="form-control" @bind-Value="User.Email"/>
     </div>
     <div class="form-group">
         <label>Password</label>
-        <InputText type="password" class="form-control" @bind-Value="@user.Password"/>
+        <InputText type="password" class="form-control" @bind-Value="User.Password"/>
     </div>
     <button type="submit" class="btn btn-primary">Log In</button>
-    <button class="btn btn-primary" @onclick="@Nav">Register</button>
+    <button class="btn btn-primary">Register</button>
 </EditForm>
 
 @code {
-    List<AccountModel>? accounts;
-    private User user = new User();
+    List<UserModel> checkusers;
+    private UserModel User = new();
     private async Task HandleValidSubmit()
     {
-        string sql = "select * from User_Accounts where User_Email = @user.Email and User_Password = @user.Password";
-        accounts = await _data.LoadData<AccountModel, dynamic>(sql, new { }, _config.GetConnectionString("default"));
-        if(accounts == null)
+        string CheckEmail = User.Email;
+        string CheckPassword = User.Password;
+        string sql = "select * from User_Accounts where User_Email = @User.Email and User_Password = User.Password";
+        checkusers = await _data.LoadData<UserModel, dynamic>(sql, new { User_Email = CheckEmail, User_Password = CheckPassword}, _config.GetConnectionString("default"));
+        if(checkusers == null)
         {
             //output account not valid
             Console.WriteLine("Failed to find");
@@ -41,10 +45,10 @@
             Console.WriteLine("Successful find");
         }
     }
-    void Nav()
-    {
-        //NavigationManager.NavigateTo("/register");
-    }
-
-
+    @*await LocalStorage.SetItemAsync<string>("username", User.Email);
+    await AuthStateProvider.GetAuthenticationStateAsync();
+    NavigationManager.NavigateTo("");
+    Logger.LogInformation("HandleSubmit called");
+    var response = await HttpClient.PostAsJsonAsync("", );
+    var newUserId = await response.Content.ReadFromJsonAsync<int>*@
 }
