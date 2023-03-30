@@ -16,15 +16,13 @@
 *@
 <p>
     <label>
-        Max file size:
-        <input type="number" @bind="maxFileSize" />
+        Max file size: @maxFileSize
     </label>
 </p>
 
 <p>
     <label>
-        Max allowed files:
-        <input type="number" @bind="maxAllowedFiles" />
+        Max allowed files: @maxAllowedFiles
     </label>
 </p>
 
@@ -35,6 +33,8 @@
     </label>
 </p>
 
+<button type="submit">Submit finance request</button>
+@*functionality not working*@
 @if (isLoading)
 {
     <p>Uploading...</p>

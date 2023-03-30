@@ -2,19 +2,24 @@ using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.EntityFrameworkCore;
 using MotoMotoMotors;
 using MotoMotoMotors.Data;
 using MotoMotoMotors.Models;
+using Microsoft.Extensions.Configuration;
+using System.Configuration;
+using BlazorServer.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
+
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<IDataAccess, DataAccess>();
 builder.Services.AddSingleton<ICarServicesInterface, CarService>();
 builder.Services.AddOptions();
 builder.Services.AddAuthenticationCore();
+builder.Services.AddScoped<LoginState>();
 builder.Services.AddBlazoredLocalStorage();
 //.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 

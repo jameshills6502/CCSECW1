@@ -37,6 +37,7 @@
         <label>Car Image</label>
         <InputText id="carseries" class="form-control" @bind-Value="Car.Car_Image"/>
     </div>
+    <button type="submit">Create</button>
 </EditForm>
 
 @*Inserts another car into the database from admin page*@
@@ -61,7 +62,7 @@
         string series = Car.Car_Series;
         string image = Car.Car_Image;
         int stock = Car.Car_Stock;
-        string sql = "insert into car(Car_Make, Car_Series, Car_Type, Car_Cost, Car_Stock, Car_Image, Car_Category) values(@carmake, @series, @type, @cost, @stock, @image, @category);";
+        string sql = "insert into car(Car_Make, Car_Series, Car_Type, Car_Cost, Car_Stock, Car_Image, Car_Category) values(@Car_Make, @Car_Series, @Car_Type, @Car_Cost, @Car_Stock, @Car_Image, @Car_Category);";
         await _data.SaveData(sql, new { Car_Make = carmake, Car_Series = series, Car_Type = type, Car_Cost = cost, Car_Stock = stock, Car_Image = image, Car_Category = category}, _config.GetConnectionString("default"));
     }
 }

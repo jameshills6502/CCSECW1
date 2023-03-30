@@ -2,11 +2,12 @@
 @using BlazorServer.Models;
 @using MotoMotoMotors.Data
 @using Data
+@inject NavigationManager NavigationManager
 @using Microsoft.Extensions.Configuration
 @inject IDataAccess _data
 @inject IConfiguration _config
 
-<h3>Buy</h3>
+<h3>Please input your card details to purchase:</h3>
 @* Shows the customer the closest *@
 <EditForm Model="@purchase" OnValidSubmit="@sold">
     <DataAnnotationsValidator />
@@ -37,9 +38,10 @@
     </div>
     <button type="submit" class="btn btn-primary">Purchase</button>
 </EditForm>
+<span style="font-weight:bold;font-size:28px;color:#c00">@Message</span>
 @code {
     [Parameter] public string Id { get; set; }
-
+    private string Message { get; set; } = "";
     List<CarModel> CarInfo;
     List<PurchaseModel> purchases;
     private PurchaseModel purchase = new();
@@ -54,9 +56,11 @@
                 BillingAddress = purchase.BillingAddress,
                 ExpiryDate = purchase.ExpiryDate
             };
-        purchases.Add(purchasemade);
-        string sql = "update car set Car_Stock = Car_Stock - 1 where Car_ID = @Id;";
-        await _data.SaveData(sql, new { Car_ID = Id }, _config.GetConnectionString("default"));
+        Message = "Purchase made successfully! The nearest dealer is on Mansion Ln, Roundhay, Leeds LS8 2HH";
+        //send email as verification
+
+        //string sql = "update car set Car_Stock = Car_Stock - 1 where Car_ID = @Id;";
+        //await _data.SaveData(sql, new { Car_ID = Id }, _config.GetConnectionString("default"));
 
     }
 }

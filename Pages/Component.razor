@@ -26,10 +26,21 @@
     </div>
     <button type="submit" class="btn btn-primary">Create Account</button>
 </EditForm>
-
+<span style="font-weight:bold;font-size:28px;color:#c00">@Message</span>
+@if (check_user == null){
+    <p><em>Loading...</em></p>
+}
+else
+{@foreach (var p in check_user)
+    
+    {
+        <h1> @p.User_Email, @p.User_Password</h1>
+    }
+}
 @code {
+    private string Message { get; set; } = "";
     private List<UserModel> users;
-    private List<UserModel> check_user;
+    private List<PersonModel> check_user;
     private AccountModel accounts = new();
     private async Task create_account()
     {
@@ -38,19 +49,19 @@
                 Email = accounts.Email,
                 Password = accounts.Password
             };
-        users.Add(newaccount);
-        string New_Email = accounts.Email;
-        string New_Password = accounts.Password;
-        string sql_check = "select * from User_Accounts where User_Email = @New_Email;";
+        string sql_check = "select * from User_Accounts where User_Email = @User_Email;";
 
-        check_user = await _data.LoadData<UserModel, dynamic>(sql_check, new { User_Email = New_Email}, _config.GetConnectionString("default"));
-        if(check_user == null)
-        {
-            string sql = "insert into User_Accounts(User_Email, User_Password) VALUES (@New_Email, @New_Password);";
-            await _data.SaveData(sql, new { User_Email = New_Email, User_Password = New_Password}, _config.GetConnectionString("default"));
+        check_user = await _data.LoadData<PersonModel, dynamic>(sql_check, new { User_Email = @accounts.Email}, _config.GetConnectionString("default"));
+        if (check_user != null)
+    {
+            string sql = "insert into User_Accounts(User_Email, User_Password) VALUES (@User_Email, @User_Password);";
+            await _data.SaveData(sql, new { User_Email = @accounts.Email, User_Password = @accounts.Password}, _config.GetConnectionString("default"));
+            Message = "Account Created!";
+
         }
-        else
+        else if(check_user == null)
         {
+            Message = "Account already exists";
             accounts.Password = string.Empty;
             accounts.Email = string.Empty;
             accounts.PasswordConfirmation = string.Empty;

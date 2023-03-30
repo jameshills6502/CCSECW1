@@ -1,5 +1,5 @@
 ﻿@page "/login"
-
+@using System.Net.Mail;
 @using Data
 @using BlazorServer.Models
 @using Microsoft.Extensions.Configuration
@@ -7,6 +7,7 @@
 @inject IConfiguration _config
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthStateProvider
+@inject BlazorServer.Data.LoginState loginState;
 
 <PageTitle>Login</PageTitle>
 <h3>Login Page</h3>
@@ -22,28 +23,72 @@
         <InputText type="password" class="form-control" @bind-Value="User.Password"/>
     </div>
     <button type="submit" class="btn btn-primary">Log In</button>
-    <button class="btn btn-primary">Register</button>
 </EditForm>
+<span style="font-weight:bold;font-size:28px;color:#c00">@Message</span>
 
 @code {
+    private string Message { get; set; } = "";
+
     List<UserModel> checkusers;
     private UserModel User = new();
     private async Task HandleValidSubmit()
     {
-        string CheckEmail = User.Email;
-        string CheckPassword = User.Password;
-        string sql = "select * from User_Accounts where User_Email = @User.Email and User_Password = User.Password";
-        checkusers = await _data.LoadData<UserModel, dynamic>(sql, new { User_Email = CheckEmail, User_Password = CheckPassword}, _config.GetConnectionString("default"));
-        if(checkusers == null)
+        if(User.Email == "u2141560@live.warwick.ac.uk" && User.Password == "123456")
         {
-            //output account not valid
-            Console.WriteLine("Failed to find");
+            string username = User.Email;
+            Message = "Logged In";
+            NavigationManager.NavigateTo("/");
+        }
+        else if(User.Email == "jameshillsuk2@gmail.com" && User.Password == "admin123")
+        {
+            void SendMail()
+            {
+                using (MailMessage mail = new MailMessage())
+                {
+                    var random = new Random();
+                    var value = random.Next();
+                    mail.From = new MailAddress("motomotomotors9@gmail.com");
+                    mail.To.Add("jameshillsuk2@gmail.com");
+                    mail.Subject = "Verify account";
+                    mail.Body = "<h1>This is your auth code: @value </h1>";
+                    mail.IsBodyHtml = true;
+
+                    using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
+                    {
+                        smtp.Credentials = new System.Net.NetworkCredential("motomotomotors9@gmail.com", "PleaseDontEverMake");
+                        smtp.EnableSsl = true;
+                        smtp.Send(mail);
+                    }
+                }
+            }
+            string username = User.Email;
+            loginState.SetLogin(true, username);
+            NavigationManager.NavigateTo("/admin");
         }
         else
         {
-            //set login value to user id, display this user info on account page
-            Console.WriteLine("Successful find");
+            Message = "Invalid Email or Password";
         }
+        //string sql = "select * from User_Accounts;";
+        //checkusers = await _data.LoadData<UserModel, dynamic>(sql, new { }, _config.GetConnectionString("default"));
+        //var findemail = checkusers.Find(item => item.Email == User.Email);
+        //var findpassword = checkusers.Find(item => item.Password == User.Password);
+       @* if (findemail != null && findpassword != null)
+        {
+            Message = "Logged in";
+        }
+        else if (findemail != null && findpassword == null)
+        {
+            Message = "Invalid email or password";
+        }
+        else if (findemail == null && findpassword != null)
+        {
+            Message = "Invalid email or password";
+        }
+        else
+        {
+            Message = "Invalid email or password";
+        }*@
     }
     @*await LocalStorage.SetItemAsync<string>("username", User.Email);
     await AuthStateProvider.GetAuthenticationStateAsync();
